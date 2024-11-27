@@ -31,7 +31,7 @@
   function getCryptoData() {
     const cryptoName = document.getElementById("crypto-name").value;
 
-    fetch(`/api/crypto/search/${cryptoName}`)
+    fetch(`http://localhost:8080/api/crypto/search/${cryptoName}`)
             .then(response => response.json())
             .then(data => {
               if (data) {
@@ -44,7 +44,7 @@
 
                 generatePricePrediction(data);
 
-                fetch(`/api/crypto/historical-data/${cryptoName}`)
+                fetch(`http://localhost:8080/api/crypto/historical-data/${cryptoName}`)
                         .then(response => response.json())
                         .then(histData => {
                           if (histData && histData.prices) {

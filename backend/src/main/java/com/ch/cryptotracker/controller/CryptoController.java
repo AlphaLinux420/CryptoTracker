@@ -4,13 +4,11 @@ import com.ch.cryptotracker.model.Crypto;
 import com.ch.cryptotracker.model.CryptoPredictionResponse;
 import com.ch.cryptotracker.service.CryptoService;
 import com.ch.cryptotracker.service.PricePredictionService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/crypto")
+@CrossOrigin("*")
 public class CryptoController {
 
     private final CryptoService cryptoService;
