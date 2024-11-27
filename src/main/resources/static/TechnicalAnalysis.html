@@ -1,0 +1,79 @@
+<h1>Technical Analysis</h1>
+<div>
+  <input type="text" id="cryptoSymbolTA" placeholder="Enter crypto symbol for analysis (e.g. bitcoin)">
+  <button onClick="showTechnicalAnalysis()">Analyze</button>
+</div>
+
+<h2>Technical Analysis Chart</h2>
+<canvas id="technicalChart" width="600" height="400"></canvas>
+
+<script>
+  function showTechnicalAnalysis() {
+    let symbol = document.getElementById("cryptoSymbolTA").value;
+
+    // Fetch price data for the crypto (no candlestick data)
+    fetch(`/crypto/price?symbol=${symbol}`)
+            .then(response => response.json())
+            .then(data => {
+              const priceData = data.prices; // Assuming `prices` contains time-series price data
+              const labels = priceData.map(price => new Date(price[0]).toLocaleDateString());
+              const prices = priceData.map(price => price[1]);
+
+              // Calculate moving averages (Simple Example)
+              const shortMA = calculateMovingAverage(prices, 7); // 7-day moving average
+              const longMA = calculateMovingAverage(prices, 30); // 30-day moving average
+
+              // Create the chart with technical indicators
+              createTechnicalChart(labels, prices, shortMA, longMA);
+            });
+  }
+
+  // Function to calculate moving average
+  function calculateMovingAverage(data, period) {
+    let movingAvg = [];
+    for (let i = 0; i < data.length; i++) {
+      if (i >= period - 1) {
+        const avg = data.slice(i - period + 1, i + 1).reduce((acc, curr) => acc + curr, 0) / period;
+        movingAvg.push(avg);
+      } else {
+        movingAvg.push(null); // No moving average for the first few points
+      }
+    }
+    return movingAvg;
+  }
+
+  // Function to create a chart with technical analysis
+  function createTechnicalChart(labels, priceData, shortMA, longMA) {
+    const ctx = document.getElementById('technicalChart').getContext('2d');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Price (USD)',
+          data: priceData,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+          fill: false
+        }, {
+          label: '7-Day Moving Average',
+          data: shortMA,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1,
+          fill: false
+        }, {
+          label: '30-Day Moving Average',
+          data: longMA,
+          borderColor: 'rgba(153, 102, 255, 1)',
+          borderWidth: 1,
+          fill: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  }
+</script>
