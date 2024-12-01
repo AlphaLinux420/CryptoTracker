@@ -1,10 +1,14 @@
 package com.ch.cryptotracker.controller;
 
+import com.ch.cryptotracker.model.CandlestickData;
+import com.ch.cryptotracker.model.CandlestickDataEntity;
 import com.ch.cryptotracker.model.Crypto;
 import com.ch.cryptotracker.model.CryptoPredictionResponse;
 import com.ch.cryptotracker.service.CryptoService;
 import com.ch.cryptotracker.service.PricePredictionService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/crypto")
@@ -17,6 +21,16 @@ public class CryptoController {
     public CryptoController(CryptoService cryptoService, PricePredictionService pricePredictionService) {
         this.cryptoService = cryptoService;
         this.pricePredictionService = pricePredictionService;
+    }
+
+    @GetMapping("/api/klinedata/{symbol}")
+    public List<CandlestickDataEntity> getKlineData(@PathVariable String symbol) {
+        return cryptoService.findBySymbol(symbol);
+    }
+
+    @PostMapping("/api/candlestick/save")
+    public void saveCandlestickData(@RequestParam String symbol, @RequestParam String interval, @RequestParam String startTime, @RequestParam String endTime) {
+        cryptoService.saveCandlestickData(symbol, interval, startTime, endTime);
     }
 
     @GetMapping("/api/crypto/search/{cryptoId}")
