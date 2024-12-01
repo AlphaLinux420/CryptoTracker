@@ -7,106 +7,62 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import DescriptionIcon from '@mui/icons-material/Description';
 import LayersIcon from '@mui/icons-material/Layers';
-import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
+import { AppProvider, type Navigation, Router } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { useDemoRouter } from '@toolpad/core/internal';
+import Dashboard from './Dashboard';
+import Gugus from "./Gugus.tsx";
 
 const NAVIGATION: Navigation = [
+    { kind: 'header', title: 'Main items' },
+    { segment: 'dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
+    { segment: 'orders', title: 'Orders', icon: <ShoppingCartIcon /> },
+    { kind: 'divider' },
+    { kind: 'header', title: 'Analytics' },
     {
-        kind: 'header',
-        title: 'Main items',
+        segment: 'reports', title: 'Reports', icon: <BarChartIcon />, children: [
+            { segment: 'sales', title: 'Sales', icon: <DescriptionIcon /> },
+            { segment: 'traffic', title: 'Traffic', icon: <DescriptionIcon /> },
+        ]
     },
-    {
-        segment: 'dashboard',
-        title: 'Dashboard',
-        icon: <DashboardIcon />,
-    },
-    {
-        segment: 'orders',
-        title: 'Orders',
-        icon: <ShoppingCartIcon />,
-    },
-    {
-        kind: 'divider',
-    },
-    {
-        kind: 'header',
-        title: 'Analytics',
-    },
-    {
-        segment: 'reports',
-        title: 'Reports',
-        icon: <BarChartIcon />,
-        children: [
-            {
-                segment: 'sales',
-                title: 'Sales',
-                icon: <DescriptionIcon />,
-            },
-            {
-                segment: 'traffic',
-                title: 'Traffic',
-                icon: <DescriptionIcon />,
-            },
-        ],
-    },
-    {
-        segment: 'integrations',
-        title: 'Integrations',
-        icon: <LayersIcon />,
-    },
+    { segment: 'integrations', title: 'Integrations', icon: <LayersIcon /> },
 ];
 
 const demoTheme = createTheme({
-    cssVariables: {
-        colorSchemeSelector: 'data-toolpad-color-scheme',
-    },
+    cssVariables: { colorSchemeSelector: 'data-toolpad-color-scheme' },
     colorSchemes: { light: true, dark: true },
-    breakpoints: {
-        values: {
-            xs: 0,
-            sm: 600,
-            md: 600,
-            lg: 1200,
-            xl: 1536,
-        },
-    },
+    breakpoints: { values: { xs: 0, sm: 600, md: 600, lg: 1200, xl: 1536 } },
 });
 
 function DemoPageContent({ pathname }: { pathname: string }) {
+    const components: { [key: string]: React.ReactNode } = {
+        '/dashboard': <Dashboard />,
+        "/orders": <Gugus/>
+    };
+
     return (
-        <Box
-            sx={{
-                py: 4,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-            }}
-        >
-            <Typography>Dashboard content for {pathname}</Typography>
+        <Box sx={{ py: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+            {components[pathname] || <Typography>Page not found</Typography>}
         </Box>
     );
 }
 
-interface DemoProps {
-    window?: () => Window;
+
+
+function useDemoRouter(initialPath: string): Router {
+    const [pathname, setPathname] = React.useState(initialPath);
+
+    return React.useMemo(() => ({
+        pathname,
+        searchParams: new URLSearchParams(),
+        navigate: (path: string | URL) => setPathname(String(path)),
+    }), [pathname]);
 }
 
-export default function Content(props: DemoProps) {
-    const { window } = props;
-
+export default function Content() {
     const router = useDemoRouter('/dashboard');
 
-    const demoWindow = window !== undefined ? window() : undefined;
-
     return (
-        <AppProvider
-            navigation={NAVIGATION}
-            router={router}
-            theme={demoTheme}
-            window={demoWindow}
-        >
+        <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}>
             <DashboardLayout>
                 <DemoPageContent pathname={router.pathname} />
             </DashboardLayout>
