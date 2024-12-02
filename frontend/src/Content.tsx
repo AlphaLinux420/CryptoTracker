@@ -1,51 +1,44 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { createTheme } from '@mui/material/styles';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import DescriptionIcon from '@mui/icons-material/Description';
+import {createTheme} from '@mui/material/styles';
+
 import LayersIcon from '@mui/icons-material/Layers';
-import { AppProvider, type Navigation, Router } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+import {AppProvider, type Navigation, Router} from '@toolpad/core/AppProvider';
+import {DashboardLayout} from '@toolpad/core/DashboardLayout';
 import Dashboard from './Dashboard';
-import Gugus from "./Gugus.tsx";
+import StarIcon from '@mui/icons-material/Star';
+import Favourites from "./Favourites.tsx";
+import Portfolio from "./Portfolio.tsx";
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 
 const NAVIGATION: Navigation = [
-    { kind: 'header', title: 'Main items' },
-    { segment: 'dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
-    { segment: 'orders', title: 'Orders', icon: <ShoppingCartIcon /> },
-    { kind: 'divider' },
-    { kind: 'header', title: 'Analytics' },
-    {
-        segment: 'reports', title: 'Reports', icon: <BarChartIcon />, children: [
-            { segment: 'sales', title: 'Sales', icon: <DescriptionIcon /> },
-            { segment: 'traffic', title: 'Traffic', icon: <DescriptionIcon /> },
-        ]
-    },
-    { segment: 'integrations', title: 'Integrations', icon: <LayersIcon /> },
+    {kind: 'header', title: 'Main items'},
+    {segment: 'dashboard', title: 'Dashboard', icon: <ShowChartIcon/>},
+    {segment: 'favourite', title: 'Favourites', icon: <StarIcon/>},
+    {segment: 'portfolio', title: 'Portfolios', icon: <LayersIcon/>},
 ];
 
 const demoTheme = createTheme({
-    cssVariables: { colorSchemeSelector: 'data-toolpad-color-scheme' },
-    colorSchemes: { light: true, dark: true },
-    breakpoints: { values: { xs: 0, sm: 600, md: 600, lg: 1200, xl: 1536 } },
+    cssVariables: {colorSchemeSelector: 'data-toolpad-color-scheme'},
+    colorSchemes: {light: true, dark: true},
+    breakpoints: {values: {xs: 0, sm: 600, md: 600, lg: 1200, xl: 1536}},
 });
 
-function DemoPageContent({ pathname }: { pathname: string }) {
+function DemoPageContent({pathname}: { pathname: string }) {
     const components: { [key: string]: React.ReactNode } = {
-        '/dashboard': <Dashboard />,
-        "/orders": <Gugus/>
+        '/dashboard': <Dashboard/>,
+        "/favourite": <Favourites/>,
+        "/portfolio": <Portfolio/>
+
     };
 
     return (
-        <Box sx={{ py: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+        <Box sx={{py: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'}}>
             {components[pathname] || <Typography>Page not found</Typography>}
         </Box>
     );
 }
-
 
 
 function useDemoRouter(initialPath: string): Router {
@@ -64,7 +57,7 @@ export default function Content() {
     return (
         <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}>
             <DashboardLayout>
-                <DemoPageContent pathname={router.pathname} />
+                <DemoPageContent pathname={router.pathname}/>
             </DashboardLayout>
         </AppProvider>
     );

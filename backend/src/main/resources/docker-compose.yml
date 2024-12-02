@@ -8,8 +8,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: crypto_tracker
-      MYSQL_USER: root
-      MYSQL_PASSWORD: rootpassword
+      MYSQL_USER: crypto_user
+      MYSQL_PASSWORD: crypto_password
     ports:
       - "3306:3306"
     volumes:
