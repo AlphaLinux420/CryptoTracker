@@ -4,8 +4,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {Button, Stack, TextField} from '@mui/material';
 import Chart, {ChartType, DefaultDataPoint} from 'chart.js/auto';
-import DataCard from './components/DataCard';
-import START_DATA from "../StartData.ts";
+import DataCard from '../components/DataCard.tsx';
+import START_DATA from "../../StartData.ts";
 
 const Dashboard: React.FC = () => {
     const [cryptoData, setCryptoData] = useState<any>([]);
