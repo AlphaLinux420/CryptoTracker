@@ -6,17 +6,21 @@ import {createTheme} from '@mui/material/styles';
 import LayersIcon from '@mui/icons-material/Layers';
 import {AppProvider, type Navigation, Router} from '@toolpad/core/AppProvider';
 import {DashboardLayout} from '@toolpad/core/DashboardLayout';
-import Dashboard from './Dashboard';
+import Dashboard from './Pages/Dashboard.tsx';
 import StarIcon from '@mui/icons-material/Star';
-import Favourites from "./Favourites.tsx";
-import Portfolio from "./Portfolio.tsx";
+import Favourites from "./Pages/Favourites.tsx";
+import Portfolio from "./Pages/Portfolio.tsx";
 import ShowChartIcon from '@mui/icons-material/ShowChart';
+import News from "./Pages/News.tsx"
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 
 const NAVIGATION: Navigation = [
     {kind: 'header', title: 'Main items'},
     {segment: 'dashboard', title: 'Dashboard', icon: <ShowChartIcon/>},
     {segment: 'favourite', title: 'Favourites', icon: <StarIcon/>},
     {segment: 'portfolio', title: 'Portfolios', icon: <LayersIcon/>},
+    {segment: 'news', title: 'News', icon: <NewspaperIcon/>},
+
 ];
 
 const demoTheme = createTheme({
@@ -29,7 +33,8 @@ function DemoPageContent({pathname}: { pathname: string }) {
     const components: { [key: string]: React.ReactNode } = {
         '/dashboard': <Dashboard/>,
         "/favourite": <Favourites/>,
-        "/portfolio": <Portfolio/>
+        "/portfolio": <Portfolio/>,
+        "/news": <News/>
 
     };
 
