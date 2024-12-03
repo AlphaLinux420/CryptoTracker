@@ -9,11 +9,18 @@ services:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: crypto_tracker
       MYSQL_USER: crypto_user
-      MYSQL_PASSWORD: crypto_password
+      MYSQL_PASSWORD: userpassword
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+
+  redis:
+    image: redis:7.0
+    container_name: redis_cache
+    restart: always
+    ports:
+      - "6379:6379"
 
 volumes:
   db_data:

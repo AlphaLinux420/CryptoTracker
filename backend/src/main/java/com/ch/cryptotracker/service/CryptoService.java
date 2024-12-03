@@ -2,6 +2,7 @@ package com.ch.cryptotracker.service;
 
 import com.ch.cryptotracker.model.CandlestickDataEntity;
 import com.ch.cryptotracker.repository.CandlestickDataRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,10 +21,12 @@ public class CryptoService {
         this.repository = repository;
     }
 
+    @Cacheable(value = "candlestickData", key = "#symbol")
     public List<CandlestickDataEntity> findBySymbol(String symbol) {
         return repository.findBySymbol(symbol);
     }
 
+    @Cacheable(value = "candlestickData", key = "#symbol + #interval + #startTime + #endTime")
     public List<CandlestickDataEntity> saveAndGetData(String symbol, String interval, String startTime, String endTime) {
         saveCandlestickData(symbol, interval, startTime, endTime);
         return findBySymbol(symbol);
